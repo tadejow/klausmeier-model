@@ -1,0 +1,92 @@
+#%%
+# ==============================================================================
+# KOMÓRKA 5: Galeria profili wegetacji w punktach bifurkacji
+# ==============================================================================
+println("\n--- Tworzenie galerii profili wegetacji... ---")
+
+# --- 1. Wybierz przypadek L do analizy (najciekawszy jest ten z największą złożonością) ---
+L_focus = 25
+if !haskey(all_diagrams, L_focus)
+    println("Brak danych dla L = $L_focus. Uruchom ponownie komórkę 3.")
+else
+    # --- 2. Pobierz potrzebne dane z zapisanych wyników ---
+    br_nl = all_diagrams[L_focus]["nonlocal"]
+    br_l = all_diagrams[L_focus]["local"]
+    domain = all_diagrams[L_focus]["domain"]
+    N = all_diagrams[L_focus]["N"]
+
+    # Wyciągnij wszystkie wykryte punkty specjalne (bifurkacje) z modelu nielokalnego
+    bif_points_nl = br_nl.specialpoint
+    
+    if isempty(bif_points_nl)
+        println("Nie znaleziono żadnych punktów bifurkacji dla L = $L_focus.")
+    else
+        println("Znaleziono $(length(bif_points_nl)) punktów bifurkacji dla L = $L_focus. Rysowanie profili...")
+        
+        # Użyj tych samych stylów co poprzednio dla spójności
+        plot_size_gallery = (1600, 800) # Układ panoramiczny
+        f_title_gallery = 14
+        f_guide_gallery = 12
+        f_tick_gallery = 10
+        
+        gallery_plots = []
+        max_plots_to_show = 8 # Ogranicz liczbę wykresów, aby galeria była czytelna
+
+        for (i, bp) in enumerate(bif_points_nl)
+            if i > max_plots_to_show; break; end
+
+            # Wartość parametru A w punkcie bifurkacji
+            A_bif = bp.param
+            
+            # Profil nielokalny `u(x)` w punkcie bifurkacji
+            u_nl_profile = bp.x[1:N]
+
+            # Aby porównać, znajdź profil lokalny dla NAJBLIŻSZEJ wartości A
+            # Bifurkacje nie muszą występować w tym samym miejscu, więc to najlepsze przybliżenie.
+            _, idx_local = findmin(abs.(br_l.param .- A_bif))
+            u_l_profile = br_l.sol[idx_local].x[1:N]
+
+            # Stwórz pojedynczy wykres profilu
+            p_profile = plot(
+                title = "A ≈ $(round(A_bif, digits=3))",
+                titlefontsize = f_title_gallery,
+                tickfontsize = f_tick_gallery,
+                guidefontsize = f_guide_gallery,
+                legend = (i == 1) ? :topright : false # Legenda tylko na pierwszym wykresie
+            )
+            
+            # Narysuj profile jako scatter ploty (wykresy punktowe)
+            scatter!(p_profile, domain, u_nl_profile, 
+                label="Non-local (at bif. point)", color=:orange, markersize=3, markerstrokewidth=0)
+            
+            scatter!(p_profile, domain, u_l_profile, 
+                label="Local (at same A)", color=:cyan, markersize=3, markerstrokewidth=0, markershape=:square)
+
+            # Dodaj etykiety osi tylko na brzegach galerii
+            if i % 4 == 1 # Pierwsza kolumna
+                ylabel!(p_profile, "Biomass density u(x)")
+            end
+            if i > 4 # Dolny rząd
+                xlabel!(p_profile, "Spatial coordinate x")
+            end
+
+            push!(gallery_plots, p_profile)
+        end
+
+        # Złóż wszystkie wykresy profili w jedną figurę (galerię)
+        num_cols = 4
+        num_rows = ceil(Int, length(gallery_plots) / num_cols)
+        
+        final_gallery = plot(gallery_plots...,
+            layout = (num_rows, num_cols),
+            size = plot_size_gallery,
+            plot_title = "Vegetation Profiles at Bifurcation Points for L = $L_focus",
+            plot_titlefontsize = main_title_size,
+            left_margin = 10Plots.mm,
+            bottom_margin = 8Plots.mm,
+            link = :y # Połącz osie Y dla łatwiejszego porównania wysokości profili
+        )
+        
+        display(final_gallery)
+    end
+end
