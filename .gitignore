@@ -1,0 +1,16 @@
+# Julia
+*.log
+*.out
+
+# Python Virtual Environments
+.venv/
+venv/
+ENV/
+
+# IDE and editor files
+.idea/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
