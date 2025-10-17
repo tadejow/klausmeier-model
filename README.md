@@ -1,4 +1,4 @@
-# Numerical Analysis of the Klausmeier Vegetation Model with Non-local Dispersal
+### Numerical Analysis of the Klausmeier Vegetation Model with Non-local Dispersal in Finite Habitat Surrounded by Desert
 
 This repository contains the Julia code for the numerical analysis of the Klausmeier vegetation model, extended to include non-local dispersal on finite, one-dimensional domains. The project investigates critical patch sizes for vegetation survival and explores the complex bifurcation structures that emerge under different dispersal strategies.
 
@@ -10,14 +10,14 @@ The primary numerical tool used is the **BifurcationKit.jl** package, which enab
 
 We investigate how the minimum habitat size required for vegetation persistence (the "critical patch size") is influenced by the shape of the dispersal kernel. We compare the classical local (reaction-diffusion) model with two non-local models using kernels with "thin tails" (Super-Gaussian) and "fat tails" (Sub-Gaussian).
 
-![Critical Patch Size Plot](data/critical_patch_size.svg)
+![Critical Patch Size Plot](data/critical_patch_size_dv2_dw01.svg)
 *Figure 1: Comparison of average biomass density as a function of patch half-width L. The non-local model with fat tails (orange) is the most resilient, persisting in the smallest habitats.*
 
 ### 2. Bifurcation Diagrams
 
 We analyze how stationary solutions change with respect to the rainfall parameter `A`. The analysis reveals complex, looping solution branches, especially in the "fast diffusion" regime, indicating a cascade of secondary bifurcations.
 
-![Bifurcation Diagrams](figures/bifurcation_fast_diffusion.png)
+![Bifurcation Diagrams](data/bifurcation_diagram_dv2_dw80.svg)
 *Figure 2: Bifurcation diagrams for the fast diffusion regime ($d_w = 80.0$). The fat-tailed Sub-Gaussian kernel (right) produces significantly more complex oscillations than the thin-tailed Super-Gaussian kernel (left).*
 
 ## The Model
@@ -40,10 +40,7 @@ Doskonale. Analiza struktury Twojego repozytorium jest kluczowa, aby stworzyć i
 
 **Najważniejsza rzecz na początek: Plik `.gitignore`**
 
-Twoje repozytorium zawiera foldery, które **nigdy nie powinny być częścią repozytorium Git**, takie jak `.venv/` (środowisko wirtualne Pythona) i `.idea/` (ustawienia Twojego edytora). Powodują one, że repozytorium jest "zaśmiecone" i znacznie większe niż powinno.
-
-Musimy to naprawić, zanim zajmiemy się plikiem `README`.
-
+Twoje repozytorium zawiera foldery, które **nigdy nie powinny być częścią repozytorium Git**, takie jak `.venv/` (środowisko wirtualne Pythona) i `.idea/` (ustawienia Twojego edyt
 ---
 
 ### Krok 0: Sprzątanie Repozytorium (bardzo ważne!)
@@ -95,7 +92,6 @@ Po wykonaniu tych kroków Twoje repozytorium będzie czyste i profesjonalne.
 ### Ostateczny Plik `README.md`
 
 Teraz, gdy Twoje repozytorium jest uporządkowane, oto finalna wersja pliku `README.md`. Skopiuj cały poniższy tekst i wklej go do pliku `README.md` w głównym folderze projektu. Zaktualizowałem ścieżki do plików i format obrazów na podstawie Twojej struktury.
-
 ```markdown
 # Numerical Analysis of the Klausmeier Vegetation Model with Non-local Dispersal
 
