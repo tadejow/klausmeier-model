@@ -1,4 +1,4 @@
-### Numerical Analysis of the Klausmeier Vegetation Model with Non-local Dispersal in Finite Habitat Surrounded by Desert
+## Numerical Analysis of the Klausmeier Vegetation Model with Non-local Dispersal in Finite Habitat Surrounded by Desert
 
 This repository contains the Julia code for the numerical analysis of the Klausmeier vegetation model, extended to include non-local dispersal on finite, one-dimensional domains. The project investigates critical patch sizes for vegetation survival and explores the complex bifurcation structures that emerge under different dispersal strategies.
 
@@ -22,11 +22,11 @@ We analyze how stationary solutions change with respect to the rainfall paramete
 
 ## The Model
 
-The system models the interaction between vegetation biomass $u(x,t)$ and water concentration $w(x,t)$. The key feature is the non-local dispersal operator for biomass:
+The system models the interaction between vegetation biomass $v(x,t)$ and water concentration $w(x,t)$. The key feature is the non-local dispersal operator for biomass:
 $$
-\mathcal{L}u(x) = \int_{\Omega} J(x-y)u(y)dy - u(x)
+Lv(x) = \int_{\Omega} J(x-y)v(y)dy - v(x)
 $$
-where $J(x)$ is the dispersal kernel. Our analysis focuses on how the shape of this kernel influences the system's dynamics.
+where $J(x)$ is the dispersal kernel. Our analysis focuses on how the shape (particularly the kurtosis) of this kernel influences the system's dynamics.
 
 ## Experiments
 
