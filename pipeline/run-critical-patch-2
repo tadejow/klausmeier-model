@@ -70,7 +70,7 @@ end
 function run_simulation(L, N, u_init, v_init, op_type, operator)
     A, B, d_u, d_v = 1.8, 0.45, 2.0, 0.1
     ht = 0.0001
-    tol = 1e-10
+    tol = 1e-5
     max_iter = 500000
 
     u_old = copy(u_init)
@@ -135,7 +135,7 @@ res = Dict(
 )
 
 @showprogress "Computing..." for (i, L) in enumerate(L_vals)
-    N = max(50, floor(Int, 5 * L)) 
+    N = max(50, floor(Int, 15 * L)) 
     x_domain = range(-L, L, length=N)
     u_init = ones(N) .* v_star
     v_init = ones(N) .* w_star
@@ -183,9 +183,9 @@ p_main = plot(
     legend=:bottomright, 
     gridalpha=0.4,
     # Consistent Fonts
-    titlefontsize=f_size+2, 
+    titlefontsize=f_size, 
     tickfontsize=f_size, 
-    legendfontsize=10, # Adjusted to avoid overlapping labels
+    legendfontsize=f_size, # Adjusted to avoid overlapping labels
     guidefontsize=f_size
 )
 
@@ -198,7 +198,7 @@ plot!(p_main, L_vals, res[:fat][1], label="Non-local (Fat Tails)",
       color=:orange, marker=:circle, markersize=3, linealpha=0.8)
 
 # Reference Line
-hline!(p_main, [v_star], label=L"Spatially uniform solution $v_{*, 3}$", 
+hline!(p_main, [v_star], label=L"Spatially uniform solution", 
        color=:red, linestyle=:dash)
 
 # Annotations (Vertical Lines + Text)
@@ -207,18 +207,18 @@ function add_crit_line!(p, val, col, text_y, align, shift_factor)
         vline!(p, [val], color=col, linestyle=:dash, label="")
         # Shift text slightly relative to the line (0.9 for left, 1.1 for right)
         annotate!(p, val * shift_factor, text_y, 
-                  text("L_crit = $(round(val, digits=2))", col, align, 9))
+                  text("L_crit = $(round(val, digits=2))", col, align, f_size))
     end
 end
 
 # 1. Fat Tails (Orange) - Left of line, Top Position
-add_crit_line!(p_main, L_crit_fat, :orange, 2.8, :right, 0.9)
+add_crit_line!(p_main, L_crit_fat, :orange, 2.8, :right, 1.3)
 
 # 2. Thin Tails (Cyan) - Left of line, Lower Position (Stacked)
-add_crit_line!(p_main, L_crit_thin, :cyan, 2.0, :right, 0.9)
+add_crit_line!(p_main, L_crit_thin, :cyan, 2.4, :right, 1.1)
 
 # 3. Local (Blue) - Right of line
-add_crit_line!(p_main, L_crit_loc, :navy, 2.0, :left, 1.1)
+add_crit_line!(p_main, L_crit_loc, :navy, 2.0, :right, 0.9)
 
 # --- Side Plots (Profiles) ---
 side_plots = []
@@ -237,9 +237,9 @@ for (i, target_L) in enumerate(L_targets)
               ylims=(-0.1, 4.5), 
               xticks=(tick_pos, tick_lab),
               gridalpha=0.3, legend=false,
-              titlefontsize=10, 
-              tickfontsize=8,
-              guidefontsize=10
+              titlefontsize=f_size, 
+              tickfontsize=f_size,
+              guidefontsize=f_size
     )
 
     # SCATTER PLOTS (Markers only)
@@ -249,7 +249,7 @@ for (i, target_L) in enumerate(L_targets)
             # Use scatter! instead of plot!
             scatter!(sp, data[:,1], data[:,2], 
                      color=col, 
-                     markersize=1.5, # Small markers for density
+                     markersize=2.5, # Small markers for density
                      markerstrokewidth=0)
         end
     end
@@ -262,5 +262,5 @@ for (i, target_L) in enumerate(L_targets)
     push!(side_plots, sp)
 end
 
-final_plot = plot(p_main, side_plots..., layout=plot_layout, size=(1200, 600), margin=5Plots.mm)
+final_plot = plot(p_main, side_plots..., layout=plot_layout, size=(1200, 800), margin=5Plots.mm)
 display(final_plot)
