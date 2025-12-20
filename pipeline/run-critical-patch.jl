@@ -112,11 +112,11 @@ end
 println("Starting simulations... (this may take a few minutes)")
 
 # Parameters
-const A, B, d_u, d_v = 1.8, 0.45, 5.0, 0.7
+const A, B, d_u, d_v = 1.8, 0.45, 2.0, 0.1
 const ht = 0.0001
 const K = 50
 const L_min, L_max = 1.0, 100.0
-const tol = 1e-5
+const tol = 1e-10
 
 # Julia doesn't have geomspace, so we create it manually
 L_vals = exp.(range(log(L_min), log(L_max), length=K))
@@ -204,10 +204,12 @@ for (i, target_L) in enumerate(L_targets)
     # Find index of L_vals closest to the target L
     _, idx = findmin(abs.(L_vals .- target_L))
     actual_L = L_vals[idx]
-    
+    L_disp = round(actual_L, digits=2)
+    custom_xticks = ([-actual_L, 0.0, actual_L], ["-$L_disp", "0", "$L_disp"])
     # Create an empty plot for this subplot position
     sp = plot(title="L = $(round(actual_L, digits=2))", 
               ylims=(-0.1, uniform_solution_val * 1.1), 
+              xticks=custom_xticks,
               gridalpha=0.4,
               legend=false,
               titlefontsize=f_size, tickfontsize=f_size-2
