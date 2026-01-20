@@ -24,7 +24,7 @@ We analyze how stationary solutions change with respect to the rainfall paramete
 
 The system models the interaction between vegetation biomass $v(x,t)$ and water concentration $w(x,t)$. The key feature is the non-local dispersal operator for biomass:
 $$
-Lv(x) = \int_{\Omega} J(x-y)v(y)dy - v(x)
+Lv(x) = 1_{\Omega}(x)\left( \int_{\Omega} J(x-y)v(y)dy - v(x)\right)
 $$
 where $J(x)$ is the dispersal kernel. Our analysis focuses on how the shape (particularly the kurtosis) of this kernel influences the system's dynamics.
 
